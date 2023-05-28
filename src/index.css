@@ -1,0 +1,55 @@
+/* GLOBAL */
+:root {
+	font-family: 'JetBrains Mono';
+	background: rgb(32, 25, 74);
+	background: linear-gradient(
+		150deg,
+		rgba(32, 25, 74, 1) 0%,
+		rgba(60, 4, 54, 1) 100%
+	);
+	min-height: 100%;
+}
+
+/* SCROLLBARS */
+div::-webkit-scrollbar,
+ul::-webkit-scrollbar {
+	width: 0.5em;
+}
+
+div::-webkit-scrollbar-track,
+ul::-webkit-scrollbar-track {
+	background: white;
+}
+div::-webkit-scrollbar-thumb,
+ul::-webkit-scrollbar-thumb {
+	background: #ccc;
+	border-radius: 5rem;
+}
+div:hover::-webkit-scrollbar-thumb,
+ul:hover::-webkit-scrollbar-thumb {
+	background: #005e70;
+	border-radius: 5rem;
+}
+
+/* ANIMATIONS */
+.animate-rotate {
+	animation: rotate 2s linear infinite;
+}
+
+@keyframes rotate {
+	from {
+		transform: rotate(0deg);
+	}
+
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+/* MARKDOWN EDITOR */
+.w-md-editor-text-pre > code,
+.w-md-editor-text-input {
+	font-size: 14px !important;
+	line-height: 20px !important;
+	font-family: 'JetBrains Mono' !important;
+}
