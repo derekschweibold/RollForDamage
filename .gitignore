@@ -17,6 +17,7 @@ firebase-debug.log
 firestore.*.json
 firestore.rules
 .firebase
+.firebaserc
 
 # Environment variables
 .env
