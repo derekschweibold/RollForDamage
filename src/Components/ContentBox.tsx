@@ -19,7 +19,13 @@ const ContentBox: React.FC<IContentBoxProps> = ({
 			<Paper sx={{ p: { xs: 2, md: 3, lg: 4 } }}>
 				<Typography variant='h6'>{title}</Typography>
 				<Divider sx={{ my: 3 }} />
-				<Box sx={{ maxHeight: '65vh', overflowY: 'auto', pt: 1 }}>
+				<Box
+					sx={{
+						maxHeight: { xs: '100vh', md: '65vh' },
+						overflowY: 'auto',
+						pt: 1,
+					}}
+				>
 					{loading ? (
 						<Skeleton
 							variant='rectangular'

@@ -200,6 +200,28 @@ const StatBlock = <T,>({ formData, handleUpdate }: IStatBlockProps<T>) => {
 					/>
 				</StatValue>
 			</Grid>
+			<Grid item xs={12}>
+				<StatValue>
+					<strong>Resistances:</strong>&nbsp;
+					<ValueEditor
+						value={data?.resistances ?? ''}
+						submitting={saving}
+						prop='resistances'
+						handleUpdate={handleChange}
+					/>
+				</StatValue>
+			</Grid>
+			<Grid item xs={12}>
+				<StatValue>
+					<strong>Immunities:</strong>&nbsp;
+					<ValueEditor
+						value={data?.immunities ?? ''}
+						submitting={saving}
+						prop='immunities'
+						handleUpdate={handleChange}
+					/>
+				</StatValue>
+			</Grid>
 			<Grid item xs={12} sx={{ mt: 2 }}>
 				<MarkdownEditor
 					value={data?.abilities ?? ''}
@@ -216,6 +238,15 @@ const StatBlock = <T,>({ formData, handleUpdate }: IStatBlockProps<T>) => {
 					prop='actions'
 					handleUpdate={handleChange}
 					title='Actions:'
+				/>
+			</Grid>
+			<Grid item xs={12} sx={{ mt: 2 }}>
+				<MarkdownEditor
+					value={data?.reactions ?? ''}
+					submitting={saving}
+					prop='reactions'
+					handleUpdate={handleChange}
+					title='Reactions:'
 				/>
 			</Grid>
 			<Grid item xs={12} sx={{ mt: 2 }}>

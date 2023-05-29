@@ -2,6 +2,7 @@
 import {
 	Query,
 	WhereFilterOp,
+	addDoc,
 	collection,
 	deleteDoc,
 	doc,
@@ -82,7 +83,7 @@ export async function setData(
 
 			return await updateDoc(dataRef, { userID: userID, ...rest });
 		} else {
-			return await setDoc(doc(col), { userID: userID, ...rest });
+			return await addDoc(col, { userID: userID, ...rest });
 		}
 	} catch (error) {
 		console.log(error);

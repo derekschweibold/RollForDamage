@@ -1,25 +1,17 @@
-import {
-	Accordion,
-	AccordionDetails,
-	AccordionSummary,
-	Box,
-	Button,
-	TextField,
-} from '@mui/material';
+import { Box, Button, TextField } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import LoadingIcon from '../../Shared/LoadingIcon';
-import { IFormValues } from '../../Interfaces/FormValues';
+import { ICharacterFormValues } from '../../Interfaces/FormValues';
 import APICharacterSearch from './APICharacterSearch';
-import { IAPICharacter } from '../../Interfaces/IAPICharacterRes';
 import { ICharacterStatBlock } from '../../Interfaces/ICharacter';
 
 interface INewCharacterFormProps {
 	handleAdd: (
 		event: React.FormEvent<HTMLFormElement>,
-		formValues: IFormValues
+		formValues: ICharacterFormValues
 	) => void;
 	submitting: boolean;
-	createFrom?: IFormValues;
+	createFrom?: ICharacterFormValues;
 }
 
 const NewCharacterForm: React.FC<INewCharacterFormProps> = ({
@@ -27,7 +19,7 @@ const NewCharacterForm: React.FC<INewCharacterFormProps> = ({
 	submitting,
 	createFrom,
 }) => {
-	const [formValues, setFormValues] = useState<IFormValues>({
+	const [formValues, setFormValues] = useState<ICharacterFormValues>({
 		name: '',
 		hpTotal: 0,
 		notes: '',
@@ -35,7 +27,7 @@ const NewCharacterForm: React.FC<INewCharacterFormProps> = ({
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const value: string | number = event.target.value;
-		const name: string = event.target.name as keyof IFormValues;
+		const name: string = event.target.name as keyof ICharacterFormValues;
 		setFormValues({ ...formValues, [name]: value });
 	};
 
@@ -45,6 +37,7 @@ const NewCharacterForm: React.FC<INewCharacterFormProps> = ({
 			formData: JSON.stringify(formData),
 			name: formData.name,
 			hpTotal: formData.hitPoints,
+			notes: formData.description,
 		});
 	};
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Grid, Button, Tab, Tabs, Typography, IconButton } from '@mui/material';
+import { Grid, Tab, Tabs, Typography, IconButton, Box } from '@mui/material';
 import ICharacter from '../Interfaces/ICharacter';
 import IEncounter from '../Interfaces/IEncounter';
 import EncountersTab from './Encounters/EncountersTab';
@@ -7,7 +7,9 @@ import CharactersTab from './Characters/CharactersTab';
 import OpenEncounter from './Encounters/OpenEncounter';
 import { getAuth, signOut } from 'firebase/auth';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { getData } from '../lib/DataHelpers';
+import { getData, setData } from '../lib/DataHelpers';
+import APIKeywordSearch from './APIKeywordSearch';
+import CloseIcon from '@mui/icons-material/Close';
 
 interface ILayoutState {
 	loading: boolean;
@@ -24,9 +26,9 @@ const Layout: React.FC = () => {
 	const [characters, setCharacters] = useState<ICharacter[]>([]);
 	const [encounters, setEncounters] = useState<IEncounter[]>([]);
 
-	// const currentOpenEncounter: IEncounter | undefined = encounters?.find(
-	// 	(key, value) => key.id === state.tab
-	// );
+	const currentOpenEncounter: IEncounter | undefined = encounters?.find(
+		(key, value) => key.id === state.tab
+	);
 
 	async function getAppData() {
 		setState({ ...state, loading: true });
@@ -59,6 +61,26 @@ const Layout: React.FC = () => {
 		});
 	};
 
+	const handleRemoveTab = async (id: string) => {
+		const selectedEncounter: IEncounter | undefined = encounters.find(
+			(x) => x.id === id
+		);
+		if (selectedEncounter) {
+			selectedEncounter.open = false;
+
+			await setData('encounters', selectedEncounter, true);
+
+			const encounterCopy: IEncounter[] = [...encounters];
+			const index = encounterCopy.map((x) => x.id).indexOf(id);
+
+			if (index !== -1) {
+				encounterCopy[index] = selectedEncounter;
+			}
+
+			setEncounters(encounterCopy);
+		}
+	};
+
 	useEffect(() => {
 		getAppData();
 	}, []);
@@ -75,20 +97,45 @@ const Layout: React.FC = () => {
 					<Grid item xs='auto' sx={{ display: { xs: 'none', md: 'inline' } }}>
 						<Typography variant='caption'>
 							Hello, {auth.currentUser?.displayName}
+							<IconButton onClick={handleSignOut} color='primary'>
+								<small>
+									<LogoutIcon fontSize='inherit' />
+								</small>
+							</IconButton>
 						</Typography>
 					</Grid>
-					<Grid item xs={12} md='auto' sx={{ textAlign: 'center' }}>
+					<Grid
+						item
+						xs='auto'
+						sx={{
+							textAlign: { md: 'center' },
+							display: { xs: 'none', md: 'inline' },
+						}}
+					>
 						<Typography variant='h5'>RollForDamage</Typography>
+					</Grid>
+					<Grid
+						item
+						xs
+						sx={{
+							textAlign: { xs: 'left' },
+							display: { xs: 'inline', md: 'none' },
+						}}
+					>
+						<Typography variant='h6'>RollForDamage</Typography>
 					</Grid>
 					<Grid item xs='auto' sx={{ display: { md: 'none' } }}>
 						<Typography variant='caption'>
 							Hello, {auth.currentUser?.displayName}
+							<IconButton onClick={handleSignOut} color='primary'>
+								<small>
+									<LogoutIcon fontSize='inherit' />
+								</small>
+							</IconButton>
 						</Typography>
 					</Grid>
-					<Grid item xs='auto'>
-						<IconButton onClick={handleSignOut} color='primary'>
-							<LogoutIcon fontSize='inherit' />
-						</IconButton>
+					<Grid item xs={12} md='auto'>
+						<APIKeywordSearch />
 					</Grid>
 				</Grid>
 			</Grid>
@@ -101,16 +148,39 @@ const Layout: React.FC = () => {
 				>
 					<Tab label='My Encounters' value='encounters' />
 					<Tab label='My Characters' value='characters' />
-					{/* {!state.loading &&
+					{!state.loading &&
 						encounters
 							?.filter((x) => x.open)
-							.map((y) => <Tab label={y.name} value={y.id} />)} */}
+							.map((y) => (
+								<Tab
+									sx={{ pr: 1 }}
+									label={
+										<Box sx={{ display: 'flex', alignItems: 'center' }}>
+											{y.name}{' '}
+											<IconButton
+												onClick={() => handleRemoveTab(y.id ?? '')}
+												color='inherit'
+												sx={{ ml: 1 }}
+												size='small'
+											>
+												<CloseIcon fontSize='small' />
+											</IconButton>
+										</Box>
+									}
+									value={y.id}
+								/>
+							))}
 				</Tabs>
 			</Grid>
 			<Grid item xs={12}>
 				{state.tab === 'encounters' && (
 					<Grid container spacing={4}>
-						<EncountersTab encounters={encounters} loading={state.loading} />
+						<EncountersTab
+							encounters={encounters}
+							characters={characters}
+							loading={state.loading}
+							setEncounters={setEncounters}
+						/>
 					</Grid>
 				)}
 				{state.tab === 'characters' && (
@@ -122,11 +192,11 @@ const Layout: React.FC = () => {
 						/>
 					</Grid>
 				)}
-				{/* {state.tab !== 'encounters' &&
+				{state.tab !== 'encounters' &&
 					state.tab !== 'characters' &&
 					currentOpenEncounter && (
 						<OpenEncounter encounter={currentOpenEncounter} />
-					)} */}
+					)}
 			</Grid>
 		</Grid>
 	);

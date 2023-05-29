@@ -2,9 +2,7 @@ export default interface ICharacter {
 	id?: string;
 	userID: string;
 	name: string;
-	hpCurrent: number;
 	hpTotal: number;
-	isUp: boolean;
 	statImg?: string;
 	notes?: string;
 	formData?: string;
@@ -35,4 +33,8 @@ export interface ICharacterStatBlock {
 	legendaryActions: string;
 	type: string;
 	alignment: string;
+	resistances: string;
+	immunities: string;
+	description: string;
+	reactions: string;
 }

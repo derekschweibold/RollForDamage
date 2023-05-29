@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import 'firebaseui/dist/firebaseui.css';
 import { GoogleAuthProvider, getRedirectResult } from 'firebase/auth';
 import { getAuth, signInWithRedirect } from 'firebase/auth';
-import { Container, ThemeProvider } from '@mui/material';
+import { Box, Container, ThemeProvider, Typography } from '@mui/material';
 import Layout from './Components/Layout';
 import { theme } from './Shared/Theme';
 import firebaseApp from './FirebaseInit';
+import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
 
 function App() {
 	const [loggedIn, setLoggedIn] = useState<boolean>(false);
@@ -34,7 +35,24 @@ function App() {
 			</ThemeProvider>
 		);
 	} else {
-		return <></>;
+		return (
+			<Box
+				sx={{
+					width: '100%',
+					height: '90vh',
+					display: 'flex',
+					justifyContent: 'center',
+					alignItems: 'center',
+					flexDirection: 'column',
+					color: 'white',
+				}}
+			>
+				<Typography variant='h5' sx={{ mb: 3 }}>
+					Logging you in...
+				</Typography>
+				<HourglassEmptyIcon fontSize='large' className='animate-rotate' />
+			</Box>
+		);
 	}
 }
 

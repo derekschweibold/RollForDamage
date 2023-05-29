@@ -17,12 +17,13 @@ export interface IAPICharacter {
 	armor_class: IArmorClass[];
 	challenge_rating: number;
 	charisma: number;
-	condition_immunities: any[];
+	condition_immunities: ICondition[];
 	constitution: number;
 	damage_immunities: any[];
 	damage_resistances: any[];
 	damage_vulnerabilities: any[];
 	dexterity: number;
+	desc: string;
 	forms: any[];
 	hit_dice: string;
 	hit_points: number;
@@ -95,9 +96,22 @@ export interface IAction {
 export interface IArmorClass {
 	type: string;
 	value: number;
+	armor?: IArmor[];
+}
+
+interface IArmor {
+	index: string;
+	name: string;
+	url: string;
 }
 
 export interface IProficiency {
+	index: string;
+	name: string;
+	url: string;
+}
+
+export interface ICondition {
 	index: string;
 	name: string;
 	url: string;

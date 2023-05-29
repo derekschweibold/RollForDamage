@@ -5,7 +5,7 @@ import NewCharacterForm from './NewCharacterForm';
 import { getAuth } from 'firebase/auth';
 import ContentBox from '../ContentBox';
 import Character from './Character';
-import { IFormValues } from '../../Interfaces/FormValues';
+import { ICharacterFormValues } from '../../Interfaces/FormValues';
 import { deleteData, setData } from '../../lib/DataHelpers';
 
 interface ICharactersTabProps {
@@ -30,7 +30,7 @@ const CharactersTab: React.FC<ICharactersTabProps> = ({
 
 	async function handleAdd(
 		event: React.FormEvent<HTMLFormElement>,
-		formValues: IFormValues
+		formValues: ICharacterFormValues
 	) {
 		event.preventDefault();
 
@@ -43,8 +43,6 @@ const CharactersTab: React.FC<ICharactersTabProps> = ({
 				userID: userID,
 				name: formValues.name,
 				hpTotal: formValues.hpTotal ? formValues.hpTotal : 0,
-				hpCurrent: formValues.hpTotal ? formValues.hpTotal : 0,
-				isUp: false,
 				formData: formValues.formData ? formValues.formData : '',
 				notes: formValues.notes ? formValues.notes : '',
 			};

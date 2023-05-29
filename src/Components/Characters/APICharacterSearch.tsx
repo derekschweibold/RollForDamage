@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 import {
 	Autocomplete,
 	Box,
@@ -18,6 +19,7 @@ import {
 	ICharacterSearchResData,
 } from '../../Interfaces/IAPICharacterRes';
 import { ICharacterStatBlock } from '../../Interfaces/ICharacter';
+import { formatJSONToMarkdown } from '../../Shared/DataResponseHelpers';
 
 interface IAPICharacterSearchProps {
 	handleSetFormData: (character: ICharacterStatBlock) => void;
@@ -53,10 +55,28 @@ const APICharacterSearch: React.FC<IAPICharacterSearchProps> = ({
 			searchRes.find((x) => x.name === searchVal)?.index ?? 'error';
 		const characterData: IAPICharacter = await getAPICharacter(searchIndex);
 
+		const abilities: string = formatJSONToMarkdown(
+			characterData.special_abilities
+		);
+		const actions: string = formatJSONToMarkdown(characterData.actions);
+		const reactions: string = formatJSONToMarkdown(characterData.reactions);
+		const legendaryActions: string = formatJSONToMarkdown(
+			characterData.legendary_actions
+		);
+
 		const characterStatBlock: ICharacterStatBlock = {
 			name: characterData.name,
+			description: characterData.desc,
 			armorClass: characterData.armor_class[0].value,
-			armorType: `(${characterData.armor_class[0].type} armor)`,
+			armorType: `${
+				characterData.armor_class[0].armor
+					? `${characterData.armor_class[0].armor[0].name} armor`
+					: ''
+			}${
+				characterData.armor_class[0].type
+					? `${characterData.armor_class[0].type} armor`
+					: ''
+			}`,
 			hitPoints: characterData.hit_points,
 			hitDice: characterData.hit_points_roll,
 			speed: `${characterData.speed.walk ? characterData.speed.walk : ''}${
@@ -75,16 +95,16 @@ const APICharacterSearch: React.FC<IAPICharacterSearchProps> = ({
 			wis: characterData.wisdom,
 			cha: characterData.charisma,
 			savingThrows: `${
-				characterData.proficiencies[0].value
-					? `CON +${characterData.proficiencies[0].value}`
+				characterData.proficiencies[0]?.value
+					? `CON +${characterData.proficiencies[0]?.value}`
 					: ''
-			}, ${
-				characterData.proficiencies[1].value
-					? `INT +${characterData.proficiencies[1].value}`
+			}${
+				characterData.proficiencies[1]?.value
+					? `, INT +${characterData.proficiencies[1]?.value}`
 					: ''
-			}, ${
-				characterData.proficiencies[2].value
-					? `WIS +${characterData.proficiencies[2].value}`
+			}${
+				characterData.proficiencies[2]?.value
+					? `, WIS +${characterData.proficiencies[2]?.value}`
 					: ''
 			}`,
 			skills: characterData.proficiencies
@@ -108,32 +128,32 @@ const APICharacterSearch: React.FC<IAPICharacterSearchProps> = ({
 					? `, Tremorsense ${characterData.senses.tremorsense}`
 					: ''
 			}`,
-			languages: characterData.languages,
+			languages: characterData.languages ?? 'None',
 			cr: characterData.challenge_rating,
 			xp: characterData.xp,
 			proficiencyBonus: 2 + (characterData.challenge_rating - 1) / 4,
-			abilities: characterData.special_abilities
-				.map((ability) => {
-					const name = `**${ability.name}**`;
-					const desc = ability.desc.replace(/^(.*?:)/, '**$1**');
-					return `${name}: ${desc}`;
-				})
-				.join('\n\n'),
-			actions: characterData.actions
-				.map((action) => {
-					const desc = action.desc.replace(/^(.*?:)/, '**$1**');
-					return desc;
-				})
-				.join('\n\n'),
-			legendaryActions: characterData.legendary_actions
-				.map((action) => {
-					const name = `**${action.name}**`;
-					const desc = action.desc.replace(/^(.*?:)/, '**$1**');
-					return `${name}: ${desc}`;
-				})
-				.join('\n\n'),
+			abilities: abilities,
+			actions: actions,
+			reactions: reactions,
+			legendaryActions: legendaryActions,
 			type: characterData.type,
 			alignment: characterData.alignment,
+			resistances: `${
+				characterData.damage_resistances
+					? `${characterData.damage_resistances.join(' damage, ')} damage`
+					: 'none'
+			} ${
+				characterData.condition_immunities
+					? `${characterData.condition_immunities
+							.map((x) => x.name)
+							.join(' condition, ')} condition`
+					: 'none'
+			}`,
+			immunities: `${
+				characterData.damage_immunities
+					? `${characterData.damage_immunities.join(' damage, ')} damage`
+					: 'none'
+			}`,
 		};
 
 		handleSetFormData(characterStatBlock);

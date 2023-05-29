@@ -4,10 +4,8 @@ import {
 	Accordion,
 	AccordionDetails,
 	AccordionSummary,
-	Box,
 	Button,
 	Divider,
-	Grid,
 	IconButton,
 	Paper,
 	Table,
@@ -22,6 +20,7 @@ import LoadingIcon from '../../Shared/LoadingIcon';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import StatBlock from '../StatBlock';
 import StatValue from '../StatValue';
+import MarkdownEditor from '../Editors/MarkdownEditor';
 
 interface ICharacterProps {
 	character: ICharacter;
@@ -128,18 +127,13 @@ const Character: React.FC<ICharacterProps> = ({
 										: 'View Notes and Stats'}
 								</AccordionSummary>
 								<AccordionDetails sx={{ background: '#f5f5f5' }}>
-									<Typography variant='subtitle1' fontWeight='bold'>
-										Notes
-									</Typography>
-									<Divider sx={{ my: 2 }} />
-									<Typography variant='body2'>
-										<ValueEditor
-											value={character.notes ? character.notes : 'Add notes'}
-											prop='notes'
-											handleUpdate={updateCharacter}
-											submitting={saving}
-										/>
-									</Typography>
+									<MarkdownEditor
+										value={character?.notes ?? ''}
+										submitting={saving}
+										prop='notes'
+										handleUpdate={updateCharacter}
+										title='Notes:'
+									/>
 									<Typography
 										variant='subtitle1'
 										sx={{ mt: 3 }}

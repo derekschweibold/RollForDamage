@@ -6,11 +6,7 @@ interface IStatValueProps {
 }
 
 const StatValue: React.FC<IStatValueProps> = ({ children }) => {
-	return (
-		<Typography variant='body2' sx={{ display: 'flex', alignItems: 'center' }}>
-			{children}
-		</Typography>
-	);
+	return <Typography variant='body2'>{children}</Typography>;
 };
 
 export default StatValue;

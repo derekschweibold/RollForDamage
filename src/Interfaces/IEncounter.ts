@@ -12,4 +12,7 @@ export default interface IEncounter {
 export interface ICharacterInit {
 	initiative: number;
 	id: string;
+	eid: string;
+	color: string;
+	hpCurrent: number;
 }
